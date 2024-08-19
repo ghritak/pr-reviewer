@@ -23,25 +23,44 @@ jobs:
       - name: Read PR-specific content
         id: pr_content
         run: |
-          DATA_DICT=$(cat .github/pr_content/data_dictionary.json)
-          PRD=$(cat .github/pr_content/prd.txt)
-          SCOPE=$(cat .github/pr_content/scope.txt)
+          # Read and escape file content
+          DATA_DICT=$(cat .github/pr_content/data_dictionary.json | jq -Rs .)
+          PRD=$(cat .github/pr_content/prd.txt | jq -Rs .)
+          SCOPE=$(cat .github/pr_content/scope.txt | jq -Rs .)
+
           echo "DATA_DICT=$DATA_DICT" >> $GITHUB_ENV
           echo "PRD=$PRD" >> $GITHUB_ENV
           echo "SCOPE=$SCOPE" >> $GITHUB_ENV
-      - name: Generate review prompt using Claude
+
+      - name: Generate PR Review Prompt
         id: generate_prompt
         run: |
-          CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }}
-          RESPONSE=$(curl -X POST "https://api.anthropic.com/v1/claude/generate" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $CLAUDE_API_KEY" \
-            -d '{
-              "prompt": "Given the following information:\n\nProject Context:\n'${{ env.PRD }}'\n\nProject Scope:\n'${{ env.SCOPE }}'\n\nData Dictionary:\n'${{ env.DATA_DICT }}'\n\nPlease generate a code review prompt that focuses on code quality, maintainability, consistency, and adherence to best practices.",
-              "max_tokens": 300
-            }')
-          GENERATED_PROMPT=$(echo $RESPONSE | jq -r '.completion')
-          echo "PROMPT=$GENERATED_PROMPT" >> $GITHUB_ENV
+          PROMPT_REQUEST=$(cat <<EOF
+          Please generate a comprehensive prompt for an AI code reviewer. The prompt should include instructions for reviewing code quality, functionality, performance, security, documentation, test coverage, style consistency, error handling, and dependency management. Additionally, include specific guidelines related to the following project context, scope, and data dictionary:
+
+          Project Context:
+          ${{ env.PRD }}
+
+          Project Scope:
+          ${{ env.SCOPE }}
+
+          Data Dictionary:
+          ${{ env.DATA_DICT }}
+
+          The generated prompt should be detailed, actionable, and tailored to the specific needs of this project.
+          EOF
+          )
+
+          GENERATED_PROMPT=$(aws bedrock invoke-model \
+            --model-id anthropic.claude-v2 \
+            --body "{\"prompt\":\"Human: ${PROMPT_REQUEST}\n\nAssistant: Here's a comprehensive prompt for an AI code reviewer tailored to your project:\n\n\", \"max_tokens_to_sample\":2000}" \
+            --cli-binary-format raw-in-base64-out \
+            | jq -r '.completion' | sed 's/"/\\"/g')
+
+          echo "GENERATED_PROMPT<<EOF" >> $GITHUB_ENV
+          echo "$GENERATED_PROMPT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Use AI PR Reviewer
         uses: coderabbitai/ai-pr-reviewer@latest
         with:
