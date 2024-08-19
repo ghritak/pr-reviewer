@@ -6,72 +6,22 @@ permissions:
 
 on:
   pull_request:
-  pull_request_review_comment:
-    types: [created]
-
-concurrency:
-  group: ${{ github.repository }}-${{ github.event.number || github.head_ref || github.sha }}-${{ github.workflow }}-${{ github.event_name == 'pull_request_review_comment' && 'pr_comment' || 'pr' }}
-  cancel-in-progress: ${{ github.event_name != 'pull_request_review_comment' }}
-
+    types: [opened, reopened, ready_for_review]
+  issue_comment:
 jobs:
-  review:
+  pr_agent_job:
+    if: ${{ github.event.sender.type != 'Bot' }}
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
+    name: Run pr agent on every pull request, respond to user comments
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Read PR-specific content
-        id: pr_content
-        run: |
-          # Read and escape file content
-          DATA_DICT=$(cat .github/pr_content/data_dictionary.json | jq -Rs .)
-          PRD=$(cat .github/pr_content/prd.txt | jq -Rs .)
-          SCOPE=$(cat .github/pr_content/scope.txt | jq -Rs .)
-
-          echo "DATA_DICT=$DATA_DICT" >> $GITHUB_ENV
-          echo "PRD=$PRD" >> $GITHUB_ENV
-          echo "SCOPE=$SCOPE" >> $GITHUB_ENV
-
-      - name: Generate PR Review Prompt
-        id: generate_prompt
-        run: |
-          PROMPT_REQUEST=$(cat <<EOF
-          Please generate a comprehensive prompt for an AI code reviewer. The prompt should include instructions for reviewing code quality, functionality, performance, security, documentation, test coverage, style consistency, error handling, and dependency management. Additionally, include specific guidelines related to the following project context, scope, and data dictionary:
-
-          Project Context:
-          ${{ env.PRD }}
-
-          Project Scope:
-          ${{ env.SCOPE }}
-
-          Data Dictionary:
-          ${{ env.DATA_DICT }}
-
-          The generated prompt should be detailed, actionable, and tailored to the specific needs of this project.
-          EOF
-          )
-
-          GENERATED_PROMPT=$(aws bedrock invoke-model \
-            --model-id anthropic.claude-v2 \
-            --body "{\"prompt\":\"Human: ${PROMPT_REQUEST}\n\nAssistant: Here's a comprehensive prompt for an AI code reviewer tailored to your project:\n\n\", \"max_tokens_to_sample\":2000}" \
-            --cli-binary-format raw-in-base64-out \
-            | jq -r '.completion' | sed 's/"/\\"/g')
-
-          echo "GENERATED_PROMPT<<EOF" >> $GITHUB_ENV
-          echo "$GENERATED_PROMPT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Log Generated Prompt
-        run: |
-          echo "Generated Prompt:"
-          echo "${{ env.GENERATED_PROMPT }}"
-
-      - name: Use AI PR Reviewer
-        uses: coderabbitai/ai-pr-reviewer@latest
-        with:
-          debug: true
-          review_simple_changes: false
-          review_comment_lgtm: false
+      - name: PR Agent action step
+        id: pragent
+        uses: Codium-ai/pr-agent@main
         env:
+          OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          github_action_config.auto_review: "true"
