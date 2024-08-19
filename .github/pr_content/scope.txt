@@ -1,0 +1,16 @@
+The automation covers two main flows:
+1. Deal Creation in HubSpot when an Offer is sent in Rackbeat.
+   - Trigger: Offer sent in Rackbeat.
+   - Actions: 
+     - Fetch offer data from Rackbeat.
+     - Create or update a company in HubSpot using the customer’s contact email and other details from the offer.
+     - Create a deal in HubSpot, associating it with the company and logging the process.
+
+2. Deal Stage Change in HubSpot when an Offer is accepted and converted to an Order in Rackbeat.
+   - Trigger: Offer accepted and converted to Order in Rackbeat.
+   - Actions: 
+     - Fetch order data from Rackbeat.
+     - Update the existing deal in HubSpot using the Rackbeat Offer ID or create a new deal if the order was directly created without an associated offer.
+     - Update the deal stage to 'closedwon' and adjust the deal amount and other relevant properties.
+
+The automation ensures data consistency between Rackbeat and HubSpot, reducing manual data entry and improving accuracy.

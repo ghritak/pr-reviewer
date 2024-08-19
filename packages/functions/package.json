@@ -1,0 +1,14 @@
+{
+  "name": "@crea-temp/functions",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.124",
+    "@types/node": "^20.8.4",
+    "sst": "2.38.3",
+    "zod": "^3.22.4"
+  }
+}

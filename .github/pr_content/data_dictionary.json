@@ -1,0 +1,192 @@
+[
+  {
+    "Action App Property Object": "Create company in HubSpot",
+    "Action App Property Name": "",
+    "Action App Internal Property": "",
+    "Trigger App Property Object": "",
+    "Trigger App Property Name": "",
+    "Trigger App Internal Property Name": "",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Company",
+    "Action App Property Name": "Name",
+    "Action App Internal Property": "name",
+    "Trigger App Property Object": "Customer",
+    "Trigger App Property Name": "Name",
+    "Trigger App Internal Property Name": "name",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Company",
+    "Action App Property Name": "Email",
+    "Action App Internal Property": "email",
+    "Trigger App Property Object": "Customer",
+    "Trigger App Property Name": "Contact Email",
+    "Trigger App Internal Property Name": "contact_email",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Company",
+    "Action App Property Name": "Phone",
+    "Action App Internal Property": "phone",
+    "Trigger App Property Object": "Customer",
+    "Trigger App Property Name": "Contact Phone",
+    "Trigger App Internal Property Name": "contact_phone",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Company",
+    "Action App Property Name": "Address",
+    "Action App Internal Property": "address",
+    "Trigger App Property Object": "Customer",
+    "Trigger App Property Name": "Address Street",
+    "Trigger App Internal Property Name": "address_street",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Company",
+    "Action App Property Name": "City",
+    "Action App Internal Property": "city",
+    "Trigger App Property Object": "Customer",
+    "Trigger App Property Name": "Address City",
+    "Trigger App Internal Property Name": "address_city",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Company",
+    "Action App Property Name": "Country",
+    "Action App Internal Property": "country",
+    "Trigger App Property Object": "Customer",
+    "Trigger App Property Name": "Address County",
+    "Trigger App Internal Property Name": "address_country",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Company",
+    "Action App Property Name": "Zip",
+    "Action App Internal Property": "zip",
+    "Trigger App Property Object": "Customer",
+    "Trigger App Property Name": "Address Zip Code",
+    "Trigger App Internal Property Name": "address_zipcode",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "",
+    "Action App Property Name": "",
+    "Action App Internal Property": "",
+    "Trigger App Property Object": "",
+    "Trigger App Property Name": "",
+    "Trigger App Internal Property Name": "",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Create Deal in HubSpot",
+    "Action App Property Name": "",
+    "Action App Internal Property": "",
+    "Trigger App Property Object": "",
+    "Trigger App Property Name": "",
+    "Trigger App Internal Property Name": "",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Amount",
+    "Action App Internal Property": "amount",
+    "Trigger App Property Object": "Offer",
+    "Trigger App Property Name": "Total",
+    "Trigger App Internal Property Name": "total_total",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Deal Name",
+    "Action App Internal Property": "dealname",
+    "Trigger App Property Object": "Offer",
+    "Trigger App Property Name": "Customer Name",
+    "Trigger App Internal Property Name": "name",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Rackbeat Offer ID",
+    "Action App Internal Property": "rackbeat_offer_id",
+    "Trigger App Property Object": "Offer",
+    "Trigger App Property Name": "Offer Number",
+    "Trigger App Internal Property Name": "number",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Deal Stage",
+    "Action App Internal Property": "dealstage",
+    "Trigger App Property Object": "Offer",
+    "Trigger App Property Name": "NA",
+    "Trigger App Internal Property Name": "NA",
+    "Default": "contractsent",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Deal Currency Code",
+    "Action App Internal Property": "deal_currency_code",
+    "Trigger App Property Object": "Offer",
+    "Trigger App Property Name": "Currency",
+    "Trigger App Internal Property Name": "currency",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "On Update deal",
+    "Action App Property Name": "",
+    "Action App Internal Property": "",
+    "Trigger App Property Object": "",
+    "Trigger App Property Name": "",
+    "Trigger App Internal Property Name": "",
+    "Default": "",
+    "Required?": ""
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Rackbeat Order ID",
+    "Action App Internal Property": "rackbeat_order_id",
+    "Trigger App Property Object": "Order",
+    "Trigger App Property Name": "Order Number",
+    "Trigger App Internal Property Name": "number",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Amount",
+    "Action App Internal Property": "amount",
+    "Trigger App Property Object": "Order",
+    "Trigger App Property Name": "Total",
+    "Trigger App Internal Property Name": "total_total",
+    "Default": "",
+    "Required?": "Yes"
+  },
+  {
+    "Action App Property Object": "Deal",
+    "Action App Property Name": "Deal Stage",
+    "Action App Internal Property": "dealstage",
+    "Trigger App Property Object": "Order",
+    "Trigger App Property Name": "NA",
+    "Trigger App Internal Property Name": "NA",
+    "Default": "closedwon",
+    "Required?": "Yes"
+  }
+]
