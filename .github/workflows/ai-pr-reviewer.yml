@@ -61,6 +61,11 @@ jobs:
           echo "$GENERATED_PROMPT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Log Generated Prompt
+        run: |
+          echo "Generated Prompt:"
+          echo "${{ env.GENERATED_PROMPT }}"
+
       - name: Use AI PR Reviewer
         uses: coderabbitai/ai-pr-reviewer@latest
         with:
