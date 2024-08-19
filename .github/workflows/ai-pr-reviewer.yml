@@ -10,20 +10,44 @@ on:
     types: [created]
 
 concurrency:
-  group: ${{ github.repository }}-${{ github.event.number || github.head_ref ||
-    github.sha }}-${{ github.workflow }}-${{ github.event_name ==
-    'pull_request_review_comment' && 'pr_comment' || 'pr' }}
+  group: ${{ github.repository }}-${{ github.event.number || github.head_ref || github.sha }}-${{ github.workflow }}-${{ github.event_name == 'pull_request_review_comment' && 'pr_comment' || 'pr' }}
   cancel-in-progress: ${{ github.event_name != 'pull_request_review_comment' }}
 
 jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - uses: coderabbitai/ai-pr-reviewer@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Read PR-specific content
+        id: pr_content
+        run: |
+          DATA_DICT=$(cat .github/pr_content/data_dictionary.json)
+          PRD=$(cat .github/pr_content/prd.txt)
+          SCOPE=$(cat .github/pr_content/scope.txt)
+          echo "DATA_DICT=$DATA_DICT" >> $GITHUB_ENV
+          echo "PRD=$PRD" >> $GITHUB_ENV
+          echo "SCOPE=$SCOPE" >> $GITHUB_ENV
+      - name: Generate review prompt using Claude
+        id: generate_prompt
+        run: |
+          CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }}
+          RESPONSE=$(curl -X POST "https://api.anthropic.com/v1/claude/generate" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $CLAUDE_API_KEY" \
+            -d '{
+              "prompt": "Given the following information:\n\nProject Context:\n'${{ env.PRD }}'\n\nProject Scope:\n'${{ env.SCOPE }}'\n\nData Dictionary:\n'${{ env.DATA_DICT }}'\n\nPlease generate a code review prompt that focuses on code quality, maintainability, consistency, and adherence to best practices.",
+              "max_tokens": 300
+            }')
+          GENERATED_PROMPT=$(echo $RESPONSE | jq -r '.completion')
+          echo "PROMPT=$GENERATED_PROMPT" >> $GITHUB_ENV
+      - name: Use AI PR Reviewer
+        uses: coderabbitai/ai-pr-reviewer@latest
         with:
           debug: true
           review_simple_changes: false
           review_comment_lgtm: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
