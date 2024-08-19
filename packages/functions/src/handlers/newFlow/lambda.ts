@@ -41,8 +41,6 @@ export const handler = apiHandler(
       createDealFromOffer
     )(number, offerData, company.id);
 
-    ctx.logger.info({ dealId: deal.id }, "Deal created successfully with Id");
-
     return {
       statusCode: 200,
       body: JSON.stringify({
