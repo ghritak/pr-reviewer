@@ -11,3 +11,7 @@ export const combineString = (
 
   return trimmedFirstName || trimmedLastName || "";
 };
+
+export const print = (str: string) => {
+  console.log(str);
+};
