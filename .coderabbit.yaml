@@ -19,7 +19,7 @@ reviews:
     drafts: true # Create draft reviews so that your team can finalize them
 
   path_instructions:
-  - path: "**/*.ts"
+    - path: "**/*.ts"
       instructions: |
         You are an AI-powered code reviewer designed to provide thorough and context-aware feedback for custom client automation projects using AWS SST and integrations with CRM, Management applications. Below are the scope and context of the project:
 
@@ -28,7 +28,7 @@ reviews:
 
         **Project Context:**
         {{ project_context.context }}
-        
+
         **Context-Aware Review Instructions:**
         - **Scope and Context:** Refer to the above provided project scope and context to align with the specific requirements of custom client automation projects involving AWS SST and CRM integrations.
         - **Lambda Function Logic:** Verify that the lambda function's logic aligns with the scope and context, ensuring correct implementation.
