@@ -1,0 +1,81 @@
+project_context:
+  scope: |
+    {{ include: '.github/workflows/pr_content/scope.md' }}
+  context: |
+    {{ include: '.github/workflows/pr_content/prd.txt' }}
+
+language: "en-US" # Review comments will be in US English
+early_access: false # No early access to new features, to ensure stability in reviews
+
+reviews:
+  profile: "balanced" # A balanced review profile suitable for custom automation projects
+  request_changes_workflow: true # Automatically request changes if issues are found
+  high_level_summary: true # Include a high-level summary for quick insights
+  poem: false # Disable the poem feature as it may not be relevant to your projects
+  review_status: true # Include the review status in the final report
+  collapse_walkthrough: true # Collapse detailed walkthroughs for a cleaner review
+  auto_review:
+    enabled: true # Enable automatic reviews to save time
+    drafts: true # Create draft reviews so that your team can finalize them
+
+  path_instructions:
+    - path: "**/*.ts"
+      instructions: |
+        You are an AI-powered code reviewer designed to provide thorough and context-aware feedback for custom client automation projects using AWS SST and integrations with CRM, Management applications. Below are the scope and context of the project:
+
+        **Scope:**
+        {{ project_context.scope }}
+
+        **Project Context:**
+        {{ project_context.context }}
+
+        **Context-Aware Review Instructions:**
+        - **Scope and Context:** Refer to the above provided project scope and context to align with the specific requirements of custom client automation projects involving AWS SST and CRM integrations.
+        - **Lambda Function Logic:** Verify that the lambda function's logic aligns with the scope and context, ensuring correct implementation.
+        - **Workflow Definition:** Ensure that the steps within the lambda functions are well-defined and adhere to the project scope.
+
+    - path: "packages/functions/src/handlers/**/*.ts"
+      instructions: |
+        **Review Focus:**
+        - **Import Path Consistency:** Ensure that import paths are consistent and correct, especially between `connector.ts`, `lambda.ts`.
+        - **Handler Logic:** Confirm that handler functions are implemented correctly and align with integration logic.
+        - **Error Handling:** Check that error handling is robust and provides meaningful, actionable messages.
+        - **Code Structure:** Ensure the code structure follows established patterns and avoids unnecessary complexity.
+        - **Performance Considerations:** Look for opportunities to optimize performance, particularly in I/O operations and asynchronous processing.
+
+    - path: "packages/functions/src/connector.ts"
+      instructions: |
+        **Review Focus:**
+        - **Environment Variables:** Verify that environment variables (`SERVICE_KEY`, `TRPC_URL`) are correctly bound, used securely, and well-documented.
+        - **Integration Consistency:** Ensure that the connector properly integrates with all dependent services and APIs.
+        - **Code Modularity:** Review for modularity and reusability, ensuring functions are single-purpose and well-abstracted.
+        - **Security Considerations:** Check for potential security issues, particularly around sensitive data handling.
+
+    - path: "packages/functions/src/handlers/createInvoice/lambda.ts"
+      instructions: |
+        **Review Focus:**
+        - **Workflow Steps:** Ensure each Lambda workflow step is defined correctly and corresponds to the appropriate helper function in the `helpers` directory.
+        - **Error Handling:** Review error handling for consistency, with clear, meaningful messages for debugging.
+        - **Code Efficiency:** Assess code efficiency, particularly in resource and execution time management.
+        - **Compliance:** Verify compliance with relevant regulatory or organizational standards.
+
+    - path: "packages/functions/src/helpers/**/*.ts"
+      instructions: |
+        **Review Focus:**
+        - **API Integration:** Confirm correct implementation of API calls with proper error handling and retries.
+        - **Helper Functionality:** Ensure helper functions are logically grouped, follow best practices, and are reusable.
+        - **Error Messages:** Check that error messages are meaningful and consistent across the application.
+        - **Code Consistency:** Review for consistency in coding standards, including naming conventions and documentation.
+        - **Performance and Scalability:** Evaluate code for potential bottlenecks or scalability issues, particularly in loops or large data handling.
+
+    - path: "packages/functions/src/**/*.ts"
+      instructions: |
+        **Review Focus:**
+        - **Naming Conventions:** Ensure naming conventions for variables, functions, and files are consistent and adhere to standards.
+        - **Code Consistency:** Review the codebase for consistency in style, structure, and best practices.
+        - **Documentation:** Verify that code is well-documented, with clear comments explaining complex sections.
+        - **Security Practices:** Check for vulnerabilities in data handling, input validation, and third-party integrations.
+        - **Testing and Coverage:** Ensure sufficient testing and coverage for critical paths and edge cases.
+
+chat:
+  auto_reply: true # Enable auto-reply in chat for quick interactions with CodeRabbit
