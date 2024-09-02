@@ -44,7 +44,7 @@ export const handler = apiHandler(
     )(deal.associations?.["line items"].results);
 
     const fortnoxCustomer = await ctx.step(
-      { key: "find-or-create-customer-in-fortnox" },
+      { key: "find-or-create-company-in-fortnox" },
       findOrCreateCustomer
     )(hubspotContact);
 

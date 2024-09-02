@@ -102,7 +102,7 @@ export const findOrCreateCustomer = async (
   }
 
   // Create Customer
-  const { data: createdCustomer } = await ctx.apps.fortnox.POST(
+  const { data: createdCustomer } = await ctx.apps.fortnox.GET(
     "/3/customers/",
     {
       body: customerBody,
